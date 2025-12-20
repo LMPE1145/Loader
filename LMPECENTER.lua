@@ -58,6 +58,38 @@ end
 Start = tick()
 Heartbeat:Connect(HeartbeatUpdate)
 
+ local playerGui = game.Players.LocalPlayer.PlayerGui 
+  
+ local fpsGui = Instance.new("ScreenGui") 
+ fpsGui.Name = "FpsGui" 
+ fpsGui.Parent = playerGui 
+  
+ local fpsLabel = Instance.new("TextLabel") 
+ fpsLabel.Name = "FpsLabel" 
+ fpsLabel.Size = UDim2.new(0, 100, 0, 20) 
+ fpsLabel.Position = UDim2.new(0, 20, 0, 20) 
+ fpsLabel.BackgroundColor3 = Color3.new(0, 0, 0) 
+ fpsLabel.TextColor3 = Color3.new(1, 1, 1) 
+ fpsLabel.Font = Enum.Font.SourceSans 
+ fpsLabel.FontSize = Enum.FontSize.Size14 
+ fpsLabel.Text = "帧数: " 
+ fpsLabel.Parent = fpsGui 
+  
+ local lastUpdate = tick() 
+  
+ local fps = 0 
+  
+ local function updateFpsCounter() 
+     local deltaTime = tick() - lastUpdate 
+     lastUpdate = tick() 
+  
+     fps = math.floor(1 / deltaTime) 
+  
+     fpsLabel.Text = "帧数: " .. fps 
+ end 
+
+ game:GetService("RunService").RenderStepped:Connect(updateFpsCounter) 
+  
 local RevenantLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant", true))()
 RevenantLib.DefaultColor = Color3.fromRGB(255, 0, 0)
 RevenantLib:Notification({
@@ -681,6 +713,35 @@ print("会员状态： 是")
 else
 print("会员状态： 否")
 end
+
+    local credits = creds:section("Ul设置", true)
+
+credits:Toggle("移除UI辉光", "", false, function(state)
+        if state then
+            game:GetService("CoreGui")["frosty is cute"].Main.DropShadowHolder.Visible = false
+        else
+            game:GetService("CoreGui")["frosty is cute"].Main.DropShadowHolder.Visible = true
+        end
+    end)
+
+    credits:Toggle("彩虹UI", "", false, function(state)
+        if state then
+            game:GetService("CoreGui")["frosty is cute"].Main.Style = "DropShadow"
+        else
+            game:GetService("CoreGui")["frosty is cute"].Main.Style = "Custom"
+        end
+    end)
+credits:Toggle("脚本框架变小一点", "", false, function(state)
+        if state then
+        game:GetService("CoreGui")["frosty"].Main.Style = "DropShadow"
+        else
+            game:GetService("CoreGui")["frosty"].Main.Style = "Custom"
+        end
+    end)
+    
+        credits:Button("摧毁GUI",function()
+            game:GetService("CoreGui")["frosty is cute"]:Destroy()
+        end)
 
 local about = UITab1:section("『其他』", true)
 
