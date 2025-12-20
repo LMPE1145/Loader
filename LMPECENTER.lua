@@ -58,38 +58,6 @@ end
 Start = tick()
 Heartbeat:Connect(HeartbeatUpdate)
 
-local playerGui = game.Players.LocalPlayer.PlayerGui 
-  
-local fpsGui = Instance.new("ScreenGui") 
- fpsGui.Name = "FpsGui" 
- fpsGui.Parent = playerGui 
-  
-local fpsLabel = Instance.new("TextLabel") 
- fpsLabel.Name = "FpsLabel" 
- fpsLabel.Size = UDim2.new(0, 100, 0, 20) 
- fpsLabel.Position = UDim2.new(0, 20, 0, 20) 
- fpsLabel.BackgroundColor3 = Color3.new(0, 0, 0) 
- fpsLabel.TextColor3 = Color3.new(1, 1, 1) 
- fpsLabel.Font = Enum.Font.SourceSans 
- fpsLabel.FontSize = Enum.FontSize.Size14 
- fpsLabel.Text = "帧数: " 
- fpsLabel.Parent = fpsGui 
-  
-local lastUpdate = tick() 
-  
-local fps = 0 
-  
-local function updateFpsCounter() 
-     local deltaTime = tick() - lastUpdate 
-     lastUpdate = tick() 
-  
-     fps = math.floor(1 / deltaTime) 
-  
-     fpsLabel.Text = "帧数: " .. fps 
- end 
-
- game:GetService("RunService").RenderStepped:Connect(updateFpsCounter) 
-  
 local RevenantLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant", true))()
 RevenantLib.DefaultColor = Color3.fromRGB(255, 0, 0)
 RevenantLib:Notification({
@@ -877,47 +845,38 @@ about:Button("飞行v3",function()
 end)
 
 about:Button("FPS显示",function()
-    local RunService = game:GetService("RunService")
-    local CoreGui = game:GetService("CoreGui")
-
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "FPSDisplay"
-    screenGui.Parent = CoreGui
-    screenGui.ResetOnSpawn = false
-
-    local textLabel = Instance.new("TextLabel")
-    textLabel.Text = "FPS: 0"
-    textLabel.TextSize = 22
-    textLabel.Font = Enum.Font.GothamBold
-    textLabel.BackgroundTransparency = 1
-    textLabel.TextXAlignment = Enum.TextXAlignment.Left
-    textLabel.TextYAlignment = Enum.TextYAlignment.Top
-    textLabel.Size = UDim2.new(0, 200, 0, 35)
-    textLabel.Position = UDim2.new(0, 10, 0, 10)
-    textLabel.AnchorPoint = Vector2.new(0, 0)
-    textLabel.ZIndex = 10
-    textLabel.Parent = screenGui
-
-    local frameCount = 0
-    local lastUpdate = tick()
-
-    RunService.RenderStepped:Connect(function()
-        frameCount = frameCount + 1
-        
-        local currentTime = tick()
-        if currentTime - lastUpdate >= 0.15 then
-            local fps = math.floor(frameCount / (currentTime - lastUpdate))
-            local color = Color3.new(1, 1, 1)
-            
-            textLabel.Text = "FPS: " .. fps
-            textLabel.TextColor3 = color
-            
-            frameCount = 0
-            lastUpdate = currentTime
-        end
-    end)
+ local playerGui = game.Players.LocalPlayer.PlayerGui 
+  
+ local fpsGui = Instance.new("ScreenGui") 
+ fpsGui.Name = "FpsGui" 
+ fpsGui.Parent = playerGui 
+  
+ local fpsLabel = Instance.new("TextLabel") 
+ fpsLabel.Name = "FpsLabel" 
+ fpsLabel.Size = UDim2.new(0, 100, 0, 20) 
+ fpsLabel.Position = UDim2.new(0, 20, 0, 20) 
+ fpsLabel.BackgroundColor3 = Color3.new(0, 0, 0) 
+ fpsLabel.TextColor3 = Color3.new(1, 1, 1) 
+ fpsLabel.Font = Enum.Font.SourceSans 
+ fpsLabel.FontSize = Enum.FontSize.Size14 
+ fpsLabel.Text = "帧数: " 
+ fpsLabel.Parent = fpsGui 
+  
+ local lastUpdate = tick() 
+  
+ local fps = 0 
+  
+ local function updateFpsCounter() 
+     local deltaTime = tick() - lastUpdate 
+     lastUpdate = tick() 
+  
+     fps = math.floor(1 / deltaTime) 
+  
+     fpsLabel.Text = "帧数: " .. fps 
+ end 
+   game:GetService("RunService").RenderStepped:Connect(updateFpsCounter) 
 end)
-
+  
 about:Button("动态模糊", function()
     local Lighting = game:GetService("Lighting")
     
