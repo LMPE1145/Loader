@@ -58,6 +58,547 @@ end
 Start = tick()
 Heartbeat:Connect(HeartbeatUpdate)
 
+local RevenantLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/Revenant", true))()
+RevenantLib.DefaultColor = Color3.fromRGB(255, 0, 0)
+RevenantLib:Notification({
+  Text = "作者: LMPE\u{e000}",
+  Duration = 6,
+})
+wait(1)
+RevenantLib:Notification({
+  Text = "谢谢大家一直以来的支持^ω^",
+  Duration = 6,
+})
+local PlayerConfig = {
+  playernamedied = "",
+  dropdown = {},
+  LoopTeleport = false,
+  message = "",
+  sayCount = 1,
+  sayFast = false,
+  autoSay = false,
+}
+local MovementConfig = {
+  tpwalkslow = 0,
+  tpwalkmobile = 0,
+  tpwalkquick = 0,
+  tpwalkslowenable = false,
+  tpwalkmobileenable = false,
+  tpwalkquickenable = false,
+  spinspeed = 0,
+  HitboxStatue = false,
+  HitboxSize = 0,
+  HitboxTransparency = 1,
+  HitboxBrickColor = "Really red",
+  DefaultFPS = 60,
+  CurrentFPS = 60,
+  FPSLocked = false,
+  FPSVisible = false,
+}
+local ColorConfig = {
+  ['红色']= Color3.fromRGB(255, 0, 0),
+  ['蓝色'] = Color3.fromRGB(0, 0, 255),
+  ['黄色'] = Color3.fromRGB(255, 255, 0),
+  ['绿色'] = Color3.fromRGB(0, 255, 0),
+  ['青色'] = Color3.fromRGB(0, 255, 255),
+  ['橙色'] = Color3.fromRGB(255, 165, 0),
+  ['紫色'] = Color3.fromRGB(128, 0, 128),
+  ['白色'] = Color3.fromRGB(255, 255, 255),
+  ['黑色'] = Color3.fromRGB(0, 0, 0),
+}
+local AimConfig = {
+  fovsize = 50,
+  fovlookAt = false,
+  fovcolor = Color3.fromRGB(0, 255, 0),
+  fovthickness = 2,
+  Visible = false,
+  distance = 200,
+  ViewportSize = 2,
+  Transparency = 5,
+  Position = "Head",
+  teamCheck = false,
+  wallCheck = false,
+  aliveCheck = false,
+  prejudgingselfsighting = false,
+  prejudgingselfsightingdistance = 100,
+  smoothness = 5,
+  aimSpeed = 5,
+  targetLock = false,
+  hitMarker = false,
+  dynamicFOV = false,
+  dynamicFOVScale = 1.5,
+  priorityMode = "Smart",
+  aimMode = "AI",
+  autoFire = false,
+  fireRate = 10,
+  bulletDelay = 0.1,
+  weaponSwitch = false,
+  threatPriority = false,
+  healthPriority = false,
+}
+local BodyPartMap = {
+  ['头部'] = "Head",
+  ['脖子'] = "HumanoidRootPart",
+  ['躯干'] = "Torso",
+  ['左臂'] = "Left Arm",
+  ['右臂'] = "Right Arm",
+  ['左腿'] = "Left Leg",
+  ['右腿'] = "Right Leg",
+  ['左手'] = "LeftHand",
+  ['右手'] = "RightHand",
+  ['左小臂'] = "LeftLowerArm",
+  ['右小臂'] = "RightLowerArm",
+  ['左大臂'] = "LeftUpperArm",
+  ['右大臂'] = "RightUpperArm",
+  ['左脚'] = "LeftFoot",
+  ['左小腿'] = "LeftLowerLeg",
+  ['上半身'] = "UpperTorso",
+  ['左大腿'] = "LeftUpperLeg",
+  ['右脚'] = "RightFoot",
+  ['右小腿'] = "RightLowerLeg",
+  ['下半身'] = "LowerTorso",
+  ['右大腿'] = "RightUpperLeg",
+}
+function shuaxinlb(includeSelf)
+  
+  PlayerConfig.dropdown = {}
+  if includeSelf == true then
+    for _, player in pairs(game.Players:GetPlayers()) do
+      table.insert(PlayerConfig.dropdown, player.Name)
+    end
+  else
+    local localPlayer = game.Players.LocalPlayer
+    for _, player in pairs(game.Players:GetPlayers()) do
+      if player ~= localPlayer then
+        table.insert(PlayerConfig.dropdown, player.Name)
+      end
+    end
+  end
+end
+shuaxinlb(true)
+function Notify(title, text, icon, duration)
+  
+  game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = title,
+    Text = text,
+    Icon = icon,
+    Duration = duration,
+  })
+end
+local function SafeCall(func, ...)
+  
+  local success, result = pcall(func, ...)
+  if not success then
+    return nil
+  end
+  return result
+end
+local FOVCircle = nil
+local FOVLine1 = nil
+local FOVLine2 = nil
+local function InitFOV(radius, color, thickness, transparency)
+  
+  local RunService = game:GetService("RunService")
+  local UserInputService = game:GetService("UserInputService")
+  local Players = game:GetService("Players")
+  local Camera = game.Workspace.CurrentCamera
+  if FOVCircle then
+    FOVCircle:Remove()
+    FOVCircle = nil
+  end
+  FOVCircle = Drawing.new("Circle")
+  FOVCircle.Visible = true
+  FOVCircle.Thickness = thickness
+  FOVCircle.Color = color
+  FOVCircle.Filled = false
+  FOVCircle.Radius = radius
+  FOVCircle.Position = Camera.ViewportSize / 2
+  FOVCircle.Transparency = transparency
+  FOVLine1 = Drawing.new("Line")
+  FOVLine1.Visible = false
+  FOVLine1.Thickness = 2
+  FOVLine1.Color = Color3.fromRGB(255, 0, 0)
+  FOVLine1.Transparency = 1
+  FOVLine2 = Drawing.new("Line")
+  FOVLine2.Visible = true
+  FOVLine2.Thickness = 1
+  FOVLine2.Color = Color3.fromRGB(255, 255, 255)
+  FOVLine2.Transparency = 1
+  local function UpdateFOVDisplay()
+    
+    local viewportSize = Camera.ViewportSize
+    FOVCircle.Position = viewportSize / 2
+    if AimConfig.dynamicFOV then
+      FOVCircle.Radius = AimConfig.fovsize * AimConfig.dynamicFOVScale
+    else
+      FOVCircle.Radius = AimConfig.fovsize
+    end
+    FOVLine2.From = Vector2.new(viewportSize.X / 2 - 5, viewportSize.Y / 2)
+    FOVLine2.To = Vector2.new(viewportSize.X / 2 + 5, viewportSize.Y / 2)
+    FOVLine2.From = Vector2.new(viewportSize.X / 2, viewportSize.Y / 2 - 5)
+    FOVLine2.To = Vector2.new(viewportSize.X / 2, viewportSize.Y / 2 + 5)
+  end
+  UserInputService.InputBegan:Connect(function(input)
+    
+    if input.KeyCode == Enum.KeyCode.Delete then
+      RunService:UnbindFromRenderStep("FOVUpdate")
+      FOVCircle:Remove()
+      FOVCircle = nil
+      FOVLine1:Remove()
+      FOVLine1 = nil
+      FOVLine2:Remove()
+      FOVLine2 = nil
+    end
+  end)
+  RunService.RenderStepped:Connect(function()
+    
+    UpdateFOVDisplay()
+  end)
+end
+local function CleanupFOV()
+  
+  if FOVCircle then
+    FOVCircle:Remove()
+    FOVCircle = nil
+  end
+  if FOVLine1 then
+    FOVLine1:Remove()
+    FOVLine1 = nil
+  end
+  if FOVLine2 then
+    FOVLine2:Remove()
+    FOVLine2 = nil
+  end
+end
+local function UpdateFOVSettings()
+  
+  if FOVCircle then
+    FOVCircle.Thickness = AimConfig.fovthickness
+    FOVCircle.Radius = AimConfig.fovsize
+    FOVCircle.Color = AimConfig.fovcolor
+    FOVCircle.Transparency = AimConfig.Transparency / 10
+  end
+end
+local function IsSameTeam(player)
+  
+  return player.Team == game.Players.LocalPlayer.Team
+end
+local function IsAlive(player)
+  
+  return player.Character and player.Character:FindFirstChild("Humanoid") and 0 < player.Character.Humanoid.Health
+end
+local function CheckWall(player, bodyPart)
+  
+  
+  if not AimConfig.wallCheck then
+    return true
+  end
+  local localCharacter = game.Players.LocalPlayer.Character
+  if not localCharacter then
+    return false
+  end
+  local targetPart = player.Character and player.Character:FindFirstChild(bodyPart)
+  if not targetPart then
+    return false
+  end
+  local ray = Ray.new(game.Workspace.CurrentCamera.CFrame.Position, targetPart.Position - game.Workspace.CurrentCamera.CFrame.Position)
+  local workspace = game.Workspace
+  local hitPart, hitPosition = workspace:FindPartOnRayWithIgnoreList(ray, {
+    localCharacter
+  })
+  local isVisible
+  if hitPart then
+    isVisible = hitPart:IsDescendantOf(player.Character)
+  else
+    isVisible = true
+  end
+  return isVisible
+end
+local function PredictPosition(player, part)
+  
+  return part.Position + part.AssemblyLinearVelocity * ((part.Position - game.Workspace.CurrentCamera.CFrame.Position)).Magnitude / 1000
+end
+local function IsInFOV(position)
+  
+  local camera = game.Workspace.CurrentCamera
+  local viewportPoint = camera:WorldToViewportPoint(position)
+  return (Vector2.new(viewportPoint.X, viewportPoint.Y) - camera.ViewportSize / 2).Magnitude <= AimConfig.fovsize
+end
+local function GetBestTarget(bodyPart)
+  
+  local bestScore = -math.huge
+  local bestTarget = nil	
+  for _, player in ipairs(game.Players:GetPlayers()) do
+    if (not AimConfig.aliveCheck or IsAlive(player)) and player ~= game.Players.LocalPlayer then
+      local targetPart = player.Character and player.Character:FindFirstChild(bodyPart)
+      if targetPart then
+        local distance = (targetPart.Position - game.Workspace.CurrentCamera.CFrame.Position).Magnitude
+        -- ...existing code...
+        local speed = targetPart.AssemblyLinearVelocity.Magnitude
+        local camera = workspace.CurrentCamera
+        local screenPoint, isVisible = camera:WorldToViewportPoint(targetPart.Position) -- screenPoint 是 Vector3
+        local crosshairDistance = math.huge
+        
+        if isVisible and screenPoint then
+            local viewportPos = Vector2.new(screenPoint.X, screenPoint.Y)
+            crosshairDistance = (viewportPos - camera.ViewportSize / 2).Magnitude
+        end
+        
+        local priorityScore = 0
+        if AimConfig.priorityMode == "Distance" then
+            priorityScore = -distance
+        -- ...existing code...
+        elseif AimConfig.priorityMode == "Crosshair" then
+          priorityScore = -crosshairDistance
+        elseif AimConfig.priorityMode == "Speed" then
+          priorityScore = speed
+        elseif AimConfig.priorityMode == "Smart" then
+          priorityScore = -distance * 0.5 + speed * 0.3 - crosshairDistance * 0.2
+        end
+        if AimConfig.threatPriority then
+          priorityScore = priorityScore * (player:GetAttribute("ThreatLevel") or 1)
+        end
+        if AimConfig.healthPriority then
+          priorityScore = priorityScore * 1 / player.Character.Humanoid.Health
+        end
+        if bestScore < priorityScore and distance <= AimConfig.distance and (not AimConfig.teamCheck or AimConfig.teamCheck and not IsSameTeam(player)) and (not AimConfig.wallCheck or AimConfig.wallCheck and CheckWall(player, bodyPart)) then
+          bestScore = priorityScore
+          bestTarget = player
+        end
+      end
+    end
+  end
+  return bestTarget
+end
+local function AimAI()
+  
+  local target = GetBestTarget(AimConfig.Position)
+  if target and target.Character:FindFirstChild(AimConfig.Position) then
+    local targetPart = target.Character[AimConfig.Position]
+    local targetPosition = targetPart.Position
+    if IsInFOV(targetPosition) then
+      if AimConfig.prejudgingselfsighting then
+        targetPosition = PredictPosition(target, targetPart)
+      end
+      if (not AimConfig.teamCheck or not IsSameTeam(target)) and (not AimConfig.wallCheck or CheckWall(target, AimConfig.Position)) then
+        local smoothnessFactor = math.max(0.1, 1 / AimConfig.smoothness)
+        local aimSpeedFactor = math.max(0.1, AimConfig.aimSpeed * 0.1)
+        local currentCFrame = game.Workspace.CurrentCamera.CFrame
+        game.Workspace.CurrentCamera.CFrame = currentCFrame:Lerp(CFrame.new(currentCFrame.Position, targetPosition), smoothnessFactor * aimSpeedFactor)
+        if FOVLine1 then
+          local viewportPoint = game.Workspace.CurrentCamera:WorldToViewportPoint(targetPosition)
+          FOVLine1.From = Vector2.new(game.Workspace.CurrentCamera.ViewportSize.X / 2, game.Workspace.CurrentCamera.ViewportSize.Y / 2)
+          FOVLine1.To = Vector2.new(viewportPoint.X, viewportPoint.Y)
+          FOVLine1.Visible = true
+        end
+        if AimConfig.autoFire then
+          local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+          if tool and 1 / AimConfig.fireRate <= tick() - (tool:GetAttribute("LastFireTime") or 0) then
+            tool:Activate()
+            tool:SetAttribute("LastFireTime", tick())
+          end
+        end
+      end
+    elseif FOVLine1 then
+      FOVLine1.Visible = false
+    end
+  elseif FOVLine1 then
+    FOVLine1.Visible = false
+  end
+end
+local function AimFunction()
+  
+  local target = GetBestTarget(AimConfig.Position)
+  if target and target.Character:FindFirstChild(AimConfig.Position) then
+    local targetPart = target.Character[AimConfig.Position]
+    local targetPosition = targetPart.Position
+    if IsInFOV(targetPosition) then
+      local timeToTarget = ((targetPart.Position - game.Workspace.CurrentCamera.CFrame.Position)).Magnitude / 1000
+      local predictedPosition = targetPosition + targetPart.AssemblyLinearVelocity * timeToTarget + 0.5 * Vector3.new(0, -workspace.Gravity, 0) * timeToTarget ^ 2
+      if (not AimConfig.teamCheck or not IsSameTeam(target)) and (not AimConfig.wallCheck or CheckWall(target, AimConfig.Position)) then
+        local smoothnessFactor = math.max(0.1, 1 / AimConfig.smoothness)
+        local aimSpeedFactor = math.max(0.1, AimConfig.aimSpeed * 0.1)
+        local currentCFrame = game.Workspace.CurrentCamera.CFrame
+        game.Workspace.CurrentCamera.CFrame = currentCFrame:Lerp(CFrame.new(currentCFrame.Position, predictedPosition), smoothnessFactor * aimSpeedFactor)
+        if FOVLine1 then
+          local viewportPoint = game.Workspace.CurrentCamera:WorldToViewportPoint(predictedPosition)
+          FOVLine1.From = Vector2.new(game.Workspace.CurrentCamera.ViewportSize.X / 2, game.Workspace.CurrentCamera.ViewportSize.Y / 2)
+          FOVLine1.To = Vector2.new(viewportPoint.X, viewportPoint.Y)
+          FOVLine1.Visible = true
+        end
+        if AimConfig.autoFire then
+          local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+          if tool and 1 / AimConfig.fireRate <= tick() - (tool:GetAttribute("LastFireTime") or 0) then
+            tool:Activate()
+            tool:SetAttribute("LastFireTime", tick())
+          end
+        end
+      end
+    elseif FOVLine1 then
+      FOVLine1.Visible = false
+    end
+  elseif FOVLine1 then
+    FOVLine1.Visible = false
+  end
+end
+local function UpdateDynamicFOV()
+  
+  if AimConfig.dynamicFOV then
+    local target = GetBestTarget(AimConfig.Position)
+    if target and target.Character:FindFirstChild(AimConfig.Position) then
+      AimConfig.fovsize = math.clamp(20 / ((target.Character[AimConfig.Position].Position - game.Workspace.CurrentCamera.CFrame.Position)).Magnitude / 50 * (1 + target.Character[AimConfig.Position].AssemblyLinearVelocity.Magnitude / 100), 10, 100)
+      UpdateFOVSettings()
+    end
+  end
+end
+game:GetService("RunService").RenderStepped:Connect(function()
+  
+  if AimConfig.fovlookAt then
+    if AimConfig.aimMode == "AI" then
+      AimAI()
+    elseif AimConfig.aimMode == "Function" then
+      AimFunction()
+    end
+    UpdateDynamicFOV()
+  end
+end)
+local MotionBlurEnabled = false
+local BlurEffectInstance = nil
+local BlurAmount = 15
+local BlurAmplifier = 5
+local BlurSmoothness = 0.15
+local BlurThreshold = 0.05
+local BlurIntensity = 1
+local BlurColor = Color3.new(0, 0, 0)
+local BlurDirection = Vector2.new(1, 0)
+local BlurUV = {
+  0,
+  0,
+  1,
+  1
+}
+local PreviousLookVector = Vector3.zero
+local LastUpdateTime = tick()
+local BlurTypes = {
+  "MotionBlur",
+  "RadialBlur",
+  "DirectionalBlur"
+}
+local CurrentBlurType = BlurTypes[1]
+local BlurPresets = {
+  {
+    name = "默认",
+    amount = 15,
+    amplifier = 5,
+    smoothness = 0.15,
+    threshold = 0.05,
+  },
+  {
+    name = "强烈",
+    amount = 25,
+    amplifier = 10,
+    smoothness = 0.05,
+    threshold = 0.02,
+  },
+  {
+    name = "柔和",
+    amount = 8,
+    amplifier = 3,
+    smoothness = 0.2,
+    threshold = 0.1,
+  }
+}
+local function CreateBlurEffect(parent)
+  
+  if BlurEffectInstance then
+    BlurEffectInstance:Destroy()
+  end
+  BlurEffectInstance = Instance.new("BlurEffect", parent)
+  BlurEffectInstance.Name = "EnhancedMotionBlur"
+  BlurEffectInstance.Size = 0
+end
+local function UpdateMotionBlur(camera, humanoid)
+  
+  if not BlurEffectInstance or not MotionBlurEnabled then
+    return 
+  end
+  local currentLookVector = camera.CFrame.LookVector
+  local lookVectorChange = (currentLookVector - PreviousLookVector).Magnitude
+  if BlurThreshold < lookVectorChange then
+    BlurEffectInstance.Size = BlurEffectInstance.Size + (math.abs(lookVectorChange) * BlurAmount * BlurAmplifier - BlurEffectInstance.Size) * BlurSmoothness
+  else
+    BlurEffectInstance.Size = BlurEffectInstance.Size * (1 - BlurSmoothness)
+  end
+  PreviousLookVector = currentLookVector
+end
+local function SetBlurType(blurType)
+  
+  CurrentBlurType = blurType
+  if BlurEffectInstance then
+    BlurEffectInstance:Destroy()
+    CreateBlurEffect(workspace.CurrentCamera)
+  end
+end
+local function ApplyBlurPreset(preset)
+  
+  BlurAmount = preset.amount
+  BlurAmplifier = preset.amplifier
+  BlurSmoothness = preset.smoothness
+  BlurThreshold = preset.threshold
+end
+local TeleportWalkThreads = 5
+local TeleportWalkEnabled = false
+local TeleportWalkRunning = false
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local HeartbeatService = game:GetService("RunService").Heartbeat
+local function TeleportWalk(character, humanoid)
+  
+  if TeleportWalkEnabled == true then
+    TeleportWalkRunning = false
+    HeartbeatService:Wait()
+    task.wait(0.1)
+    HeartbeatService:Wait()
+    for threadIndex = 1, TeleportWalkThreads, 1 do
+      spawn(function()
+        
+        TeleportWalkRunning = true
+        while TeleportWalkRunning do
+          local deltaTime = HeartbeatService:Wait()
+          if deltaTime then
+            if character then
+              if humanoid then
+                if humanoid.Parent then
+                  local moveMagnitude = humanoid.MoveDirection.Magnitude
+                  if moveMagnitude > 0 then
+                    character:TranslateBy(humanoid.MoveDirection)
+                  end
+                else
+                  break
+                end
+              else
+                break
+              end
+            else
+              break
+            end
+          else
+            break
+          end
+        end
+      end)
+    end
+  end
+end
+LocalPlayer.CharacterAdded:Connect(function(character)
+  
+  local characterInstance = LocalPlayer.Character
+  if characterInstance then
+    task.wait(0.7)
+    characterInstance.Humanoid.PlatformStand = false
+    characterInstance.Animate.Disabled = false
+  end
+end)
+
 local success, ui = pcall(function()
 return loadstring(game:HttpGet("https://pastebin.com/raw/3vQbADjh"))()
 end)
