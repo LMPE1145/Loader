@@ -1097,3 +1097,294 @@ end)
 about:Button("LMHUB脚本", function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/LMPE1145/Loader/refs/heads/main/LMHUB.lua"))()
 end)
+
+local r125_0 = r50_0:Tab("『音乐』", "18930406865"):section("音乐", true)
+r125_0:Label("输入音乐ID即可 播放音乐仅自己可听见")
+local r128_0 = "Textbox"
+r128_0 = "音乐播放器"
+r125_0:Textbox("音乐播放器", "Textbox", "输入音乐ID", true, function(r0_310)
+  
+  local r1_310 = r0_310
+  if r1_310 then
+    audio.SoundId = "rbxassetid://" .. r1_310
+    audio:Play()
+  end
+end)
+r125_0:Button("停止播放", function()
+  
+  audio:Stop()
+end)
+r125_0:Label("下面是音乐合集↓")
+r125_0:Button("防空警报", function()
+  
+  local r0_168 = Instance.new("Sound")
+  r0_168.SoundId = "rbxassetid://792323017"
+  r0_168.Parent = game.Workspace
+  r0_168:Play()
+end)
+r125_0:Button("义勇军进行曲", function()
+  
+  local r0_39 = Instance.new("Sound")
+  r0_39.SoundId = "rbxassetid://1845918434"
+  r0_39.Parent = game.Workspace
+  r0_39:Play()
+end)
+r125_0:Button("彩虹瀑布", function()
+  
+  local r0_17 = Instance.new("Sound")
+  r0_17.SoundId = "rbxassetid://1837879082"
+  r0_17.Parent = game.Workspace
+  r0_17:Play()
+end)
+r125_0:Button("雨中牛郎", function()
+  
+  local r0_206 = Instance.new("Sound")
+  r0_206.SoundId = "rbxassetid://16831108393"
+  r0_206.Parent = game.Workspace
+  r0_206:Play()
+end)
+r125_0:Button("钢管落地(大声)", function()
+  
+  local r0_6 = Instance.new("Sound")
+  r0_6.SoundId = "rbxassetid://6729922069"
+  r0_6.Parent = game.Workspace
+  r0_6:Play()
+end)
+r125_0:Button("钢管落地", function()
+  
+  local r0_414 = Instance.new("Sound")
+  r0_414.SoundId = "rbxassetid://6011094380"
+  r0_414.Parent = game.Workspace
+  r0_414:Play()
+end)
+r125_0:Button("闪灯", function()
+  
+  local r0_684 = Instance.new("Sound")
+  r0_684.SoundId = "rbxassetid://8829969521"
+  r0_684.Parent = game.Workspace
+  r0_684:Play()
+end)
+r125_0:Button("全损音质", function()
+  
+  local r0_551 = Instance.new("Sound")
+  r0_551.SoundId = "rbxassetid://6445594239"
+  r0_551.Parent = game.Workspace
+  r0_551:Play()
+end)
+r125_0:Button("串稀", function()
+  
+  local r0_395 = Instance.new("Sound")
+  r0_395.SoundId = "rbxassetid://4809574295"
+  r0_395.Parent = game.Workspace
+  r0_395:Play()
+end)
+r125_0:Button("手枪开枪", function()
+  
+  local r0_410 = Instance.new("Sound")
+  r0_410.SoundId = "rbxassetid://6569844325"
+  r0_410.Parent = game.Workspace
+  r0_410:Play()
+end)
+r125_0:Button("喝可乐", function()
+  
+  local r0_121 = Instance.new("Sound")
+  r0_121.SoundId = "rbxassetid://6911756959"
+  r0_121.Parent = game.Workspace
+  r0_121:Play()
+end)
+r125_0:Button("Doors TheHunt 倒计时开始", function()
+  
+  local r0_361 = Instance.new("Sound")
+  r0_361.SoundId = "rbxassetid://16695384009"
+  r0_361.Parent = game.Workspace
+  r0_361:Play()
+end)
+r125_0:Button("Doors TheHunt 倒计时结束", function()
+  
+  local r0_641 = Instance.new("Sound")
+  r0_641.SoundId = "rbxassetid://16695021133"
+  r0_641.Parent = game.Workspace
+  r0_641:Play()
+end)
+r125_0:Button("你他妈劈我瓜是吧", function()
+  
+  local r0_141 = Instance.new("Sound")
+  r0_141.SoundId = "rbxassetid://7309604510"
+  r0_141.Parent = game.Workspace
+  r0_141:Play()
+end)
+r125_0:Button("未知核爆倒计时", function()
+  
+  local r0_238 = Instance.new("Sound")
+  r0_238.SoundId = "rbxassetid://9133927345"
+  r0_238.Parent = game.Workspace
+  r0_238:Play()
+end)
+r125_0:Button("火车音", function()
+  
+  local r0_487 = Instance.new("Sound")
+  r0_487.SoundId = "rbxassetid://3900067524"
+  r0_487.Parent = game.Workspace
+  r0_487:Play()
+end)
+r125_0:Button("Gentry Road", function()
+  
+  local r0_23 = Instance.new("Sound")
+  r0_23.SoundId = "rbxassetid://5567523008"
+  r0_23.Parent = game.Workspace
+  r0_23:Play()
+end)
+r125_0:Button("植物大战僵尸", function()
+  
+  local r0_600 = Instance.new("Sound")
+  r0_600.SoundId = "rbxassetid://158260415"
+  r0_600.Parent = game.Workspace
+  r0_600:Play()
+end)
+r125_0:Button("早安越南", function()
+  
+  local r0_224 = Instance.new("Sound")
+  r0_224.SoundId = "rbxassetid://8295016126"
+  r0_224.Parent = game.Workspace
+  r0_224:Play()
+end)
+r125_0:Button("愤怒芒西 Evade?", function()
+  
+  local r0_495 = Instance.new("Sound")
+  r0_495.SoundId = "rbxassetid://5029269312"
+  r0_495.Parent = game.Workspace
+  r0_495:Play()
+end)
+r125_0:Button("梅西", function()
+  
+  local r0_163 = Instance.new("Sound")
+  r0_163.SoundId = "rbxassetid://7354576319"
+  r0_163.Parent = game.Workspace
+  r0_163:Play()
+end)
+r125_0:Button("永春拳", function()
+  
+  local r0_692 = Instance.new("Sound")
+  r0_692.SoundId = "rbxassetid://1845973140"
+  r0_692.Parent = game.Workspace
+  r0_692:Play()
+end)
+r125_0:Button("带劲的音乐", function()
+  
+  local r0_306 = Instance.new("Sound")
+  r0_306.SoundId = "rbxassetid://18841891575"
+  r0_306.Parent = game.Workspace
+  r0_306:Play()
+end)
+r125_0:Button("韩国国歌", function()
+  
+  local r0_116 = Instance.new("Sound")
+  r0_116.SoundId = "rbxassetid://1837478300"
+  r0_116.Parent = game.Workspace
+  r0_116:Play()
+end)
+r125_0:Button("哥哥你女朋友不会吃醋吧?", function()
+  
+  local r0_330 = Instance.new("Sound")
+  r0_330.SoundId = "rbxassetid://8715811379"
+  r0_330.Parent = game.Workspace
+  r0_330:Play()
+end)
+r125_0:Button("蜘蛛侠出场声音", function()
+  
+  local r0_66 = Instance.new("Sound")
+  r0_66.SoundId = "rbxassetid://9108472930"
+  r0_66.Parent = game.Workspace
+  r0_66:Play()
+end)
+r125_0:Button("消防车", function()
+  
+  local r0_176 = Instance.new("Sound")
+  r0_176.SoundId = "rbxassetid://317455930"
+  r0_176.Parent = game.Workspace
+  r0_176:Play()
+end)
+r125_0:Button("万圣节1������", function()
+  
+  local r0_456 = Instance.new("Sound")
+  r0_456.SoundId = "rbxassetid://1837467198"
+  r0_456.Parent = game.Workspace
+  r0_456:Play()
+end)
+r125_0:Button("好听的", function()
+  
+  local r0_434 = Instance.new("Sound")
+  r0_434.SoundId = "rbxassetid://1844125168"
+  r0_434.Parent = game.Workspace
+  r0_434:Play()
+end)
+r125_0:Button("妈妈生的", function()
+  
+  local r0_420 = Instance.new("Sound")
+  r0_420.SoundId = "rbxassetid://6689498326"
+  r0_420.Parent = game.Workspace
+  r0_420:Play()
+end)
+r125_0:Button("Music Ball-CTT", function()
+  
+  local r0_250 = Instance.new("Sound")
+  r0_250.SoundId = "rbxassetid://9045415830"
+  r0_250.Parent = game.Workspace
+  r0_250:Play()
+end)
+r125_0:Button("电音", function()
+  
+  local r0_11 = Instance.new("Sound")
+  r0_11.SoundId = "rbxassetid://6911766512"
+  r0_11.Parent = game.Workspace
+  r0_11:Play()
+end)
+r125_0:Button("梗合集", function()
+  
+  local r0_477 = Instance.new("Sound")
+  r0_477.SoundId = "rbxassetid://8161248815"
+  r0_477.Parent = game.Workspace
+  r0_477:Play()
+end)
+r125_0:Button("Its been so long", function()
+  
+  local r0_273 = Instance.new("Sound")
+  r0_273.SoundId = "rbxassetid://6913550990"
+  r0_273.Parent = game.Workspace
+  r0_273:Play()
+end)
+r125_0:Button("Baller", function()
+  
+  local r0_12 = Instance.new("Sound")
+  r0_12.SoundId = "rbxassetid://13530439660"
+  r0_12.Parent = game.Workspace
+  r0_12:Play()
+end)
+r125_0:Button("男娘必听", function()
+  
+  local r0_241 = Instance.new("Sound")
+  r0_241.SoundId = "rbxassetid://6797864253"
+  r0_241.Parent = game.Workspace
+  r0_241:Play()
+end)
+r125_0:Button("螃蟹之舞", function()
+  
+  local r0_688 = Instance.new("Sound")
+  r0_688.SoundId = "rbxassetid://54100886218"
+  r0_688.Parent = game.Workspace
+  r0_688:Play()
+end)
+r125_0:Button("布鲁克林惨案", function()
+  
+  local r0_681 = Instance.new("Sound")
+  r0_681.SoundId = "rbxassetid://6783714255"
+  r0_681.Parent = game.Workspace
+  r0_681:Play()
+end)
+r125_0:Button("航空模拟器音乐", function()
+  
+  local r0_100 = Instance.new("Sound")
+  r0_100.SoundId = "rbxassetid://1838080629"
+  r0_100.Parent = game.Workspace
+  r0_100:Play()
+end)
