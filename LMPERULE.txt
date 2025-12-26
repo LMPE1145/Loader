@@ -252,4 +252,4 @@ end
 
 -- 如果RULER为"YES"，则正常执行主脚本
 print("✅ 协议检查通过，正在加载主脚本...")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/LMPE1145/Loader/refs/heads/main/LMPECENTRE.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/LMPE1145/Loader/refs/heads/main/LMPECENTER.lua"))()
