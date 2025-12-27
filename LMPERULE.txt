@@ -1,255 +1,69 @@
--- 规则变量检查
-if RULER ~= "YES" then
-    -- 创建界面
-    local RuleUI = Instance.new("ScreenGui")
-    RuleUI.Name = "LMPERuleUI"
-    RuleUI.Parent = game.CoreGui
-    RuleUI.ResetOnSpawn = false
+-- 检查RULER变量是否存在
+if RULER == nil then
+    -- 发送原生通知：未同意协议
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "⚠️ 协议检查失败",
+        Text = "未同意协议，请设置RULER=\"YES\"",
+        Icon = "rbxassetid://6881975538", -- 警告图标
+        Duration = 5
+    })
     
-    -- 主窗口
-    local MainFrame = Instance.new("Frame")
-    MainFrame.Name = "MainFrame"
-    MainFrame.Size = UDim2.new(0, 350, 0, 300)
-    MainFrame.Position = UDim2.new(0.5, -175, 0.5, -150)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-    MainFrame.BorderSizePixel = 1
-    MainFrame.BorderColor3 = Color3.fromRGB(60, 60, 75)
-    MainFrame.Parent = RuleUI
-    
-    -- 标题栏
-    local TitleBar = Instance.new("Frame")
-    TitleBar.Name = "TitleBar"
-    TitleBar.Size = UDim2.new(1, 0, 0, 40)
-    TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-    TitleBar.BorderSizePixel = 0
-    TitleBar.Parent = MainFrame
-    
-    local Title = Instance.new("TextLabel")
-    Title.Name = "Title"
-    Title.Size = UDim2.new(0.7, 0, 1, 0)
-    Title.Position = UDim2.new(0, 10, 0, 0)
-    Title.BackgroundTransparency = 1
-    Title.Text = "📋使用协议"
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.TextSize = 16
-    Title.Font = Enum.Font.GothamBold
-    Title.TextXAlignment = Enum.TextXAlignment.Left
-    Title.Parent = TitleBar
-    
-    -- 规则内容 (简洁版)
-    local RuleText = Instance.new("TextLabel")
-    RuleText.Name = "RuleText"
-    RuleText.Size = UDim2.new(1, -20, 0, 130)
-    RuleText.Position = UDim2.new(0, 10, 0, 50)
-    RuleText.BackgroundTransparency = 1
-    RuleText.Text = [[在使用本脚本前，请确认：
-
-• 仅用于学习研究目的
-• 遵守游戏规则
-• 用户自行承担责任
-• 使用即表示同意
-
-请勾选下方同意框]]
-    RuleText.TextColor3 = Color3.fromRGB(200, 200, 220)
-    RuleText.TextSize = 12
-    RuleText.Font = Enum.Font.Gotham
-    RuleText.TextXAlignment = Enum.TextXAlignment.Left
-    RuleText.TextYAlignment = Enum.TextYAlignment.Top
-    RuleText.TextWrapped = true
-    RuleText.Parent = MainFrame
-    
-    -- 同意区域
-    local AgreementArea = Instance.new("Frame")
-    AgreementArea.Name = "AgreementArea"
-    AgreementArea.Size = UDim2.new(1, -20, 0, 25)
-    AgreementArea.Position = UDim2.new(0, 10, 0, 190)
-    AgreementArea.BackgroundTransparency = 1
-    AgreementArea.BorderSizePixel = 0
-    AgreementArea.Parent = MainFrame
-    
-    -- 简约复选框
-    local Checkbox = Instance.new("TextButton")
-    Checkbox.Name = "Checkbox"
-    Checkbox.Size = UDim2.new(0, 20, 0, 20)
-    Checkbox.Position = UDim2.new(0, 0, 0, 2)
-    Checkbox.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
-    Checkbox.BorderSizePixel = 1
-    Checkbox.BorderColor3 = Color3.fromRGB(80, 80, 95)
-    Checkbox.Text = ""
-    Checkbox.AutoButtonColor = false
-    Checkbox.Parent = AgreementArea
-    
-    local Checkmark = Instance.new("TextLabel")
-    Checkmark.Name = "Checkmark"
-    Checkmark.Size = UDim2.new(1, 0, 1, 0)
-    Checkmark.BackgroundTransparency = 1
-    Checkmark.Text = "✓"
-    Checkmark.TextColor3 = Color3.fromRGB(0, 255, 127)
-    Checkmark.TextSize = 14
-    Checkmark.Font = Enum.Font.GothamBold
-    Checkmark.Visible = false
-    Checkmark.Parent = Checkbox
-    
-    local AgreementLabel = Instance.new("TextLabel")
-    AgreementLabel.Name = "AgreementLabel"
-    AgreementLabel.Size = UDim2.new(1, -30, 1, 0)
-    AgreementLabel.Position = UDim2.new(0, 25, 0, 0)
-    AgreementLabel.BackgroundTransparency = 1
-    AgreementLabel.Text = "我已阅读并同意以上协议"
-    AgreementLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
-    AgreementLabel.TextSize = 12
-    AgreementLabel.Font = Enum.Font.Gotham
-    AgreementLabel.TextXAlignment = Enum.TextXAlignment.Left
-    AgreementLabel.Parent = AgreementArea
-    
-    -- 按钮区域
-    local ButtonArea = Instance.new("Frame")
-    ButtonArea.Name = "ButtonArea"
-    ButtonArea.Size = UDim2.new(1, -20, 0, 40)
-    ButtonArea.Position = UDim2.new(0, 10, 1, -50)
-    ButtonArea.BackgroundTransparency = 1
-    ButtonArea.BorderSizePixel = 0
-    ButtonArea.Parent = MainFrame
-    
-    -- 拒绝按钮
-    local DeclineBtn = Instance.new("TextButton")
-    DeclineBtn.Name = "DeclineBtn"
-    DeclineBtn.Size = UDim2.new(0, 100, 0, 35)
-    DeclineBtn.Position = UDim2.new(0, 0, 0, 0)
-    DeclineBtn.BackgroundColor3 = Color3.fromRGB(244, 67, 54)
-    DeclineBtn.Text = "拒绝"
-    DeclineBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    DeclineBtn.TextSize = 13
-    DeclineBtn.Font = Enum.Font.GothamBold
-    DeclineBtn.AutoButtonColor = false
-    DeclineBtn.Parent = ButtonArea
-    
-    -- 同意按钮 (初始禁用)
-    local AcceptBtn = Instance.new("TextButton")
-    AcceptBtn.Name = "AcceptBtn"
-    AcceptBtn.Size = UDim2.new(0, 100, 0, 35)
-    AcceptBtn.Position = UDim2.new(1, -100, 0, 0)
-    AcceptBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
-    AcceptBtn.Text = "同意"
-    AcceptBtn.TextColor3 = Color3.fromRGB(120, 120, 140)
-    AcceptBtn.TextSize = 13
-    AcceptBtn.Font = Enum.Font.GothamBold
-    AcceptBtn.AutoButtonColor = false
-    AcceptBtn.Active = false
-    AcceptBtn.Parent = ButtonArea
-    
-    -- 复选框交互
-    local isAgreed = false
-    
-    Checkbox.MouseButton1Click:Connect(function()
-        isAgreed = not isAgreed
-        Checkmark.Visible = isAgreed
-        
-        if isAgreed then
-            Checkbox.BackgroundColor3 = Color3.fromRGB(44, 120, 224)
-            Checkbox.BorderColor3 = Color3.fromRGB(44, 120, 224)
-            
-            -- 启用同意按钮
-            AcceptBtn.BackgroundColor3 = Color3.fromRGB(76, 175, 80)
-            AcceptBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-            AcceptBtn.Active = true
-        else
-            Checkbox.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
-            Checkbox.BorderColor3 = Color3.fromRGB(80, 80, 95)
-            
-            -- 禁用同意按钮
-            AcceptBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
-            AcceptBtn.TextColor3 = Color3.fromRGB(120, 120, 140)
-            AcceptBtn.Active = false
-        end
-    end)
-    
-    -- 按钮点击效果
-    local function setupButtonClick(button, callback)
-        button.MouseButton1Down:Connect(function()
-            if button.Active then
-                button.BackgroundTransparency = 0.5
-            end
-        end)
-        
-        button.MouseButton1Up:Connect(function()
-            if button.Active then
-                button.BackgroundTransparency = 0
-                if callback then
-                    callback()
-                end
-            end
-        end)
-    end
-    
-    -- 拒绝按钮点击
-    setupButtonClick(DeclineBtn, function()
-        RuleUI:Destroy()
-        warn("❌ 您已拒绝协议，脚本将不会加载")
-    end)
-    
-    -- 同意按钮点击
-    setupButtonClick(AcceptBtn, function()
-        if not isAgreed then return end
-        
-        -- 设置规则变量
-        RULER = "YES"
-        
-        -- 关闭界面
-        RuleUI:Destroy()
-        
-        -- 重新检查规则并执行主脚本
-        if RULER == "YES" then
-            print("✅ 已同意协议，正在加载主脚本...")
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/LMPE1145/Loader/refs/heads/main/LMPEC.lua"))()
-        end
-    end)
-    
-    -- 窗口拖动功能
-    local dragging = false
-    local dragStart
-    local startPos
-    
-    TitleBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = MainFrame.Position
-            
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
-    end)
-    
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then
-            local delta = input.Position - dragStart
-            MainFrame.Position = UDim2.new(
-                startPos.X.Scale, 
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale, 
-                startPos.Y.Offset + delta.Y
-            )
-        end
-    end)
-    
-    -- 初始化动画
-    MainFrame.Size = UDim2.new(0, 0, 0, 0)
-    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    
-    game:GetService("TweenService"):Create(
-        MainFrame,
-        TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-        {Size = UDim2.new(0, 350, 0, 300), Position = UDim2.new(0.5, -175, 0.5, -150)}
-    ):Play()
-    
-    -- 阻止继续执行主脚本
-    return
+    -- 控制台输出
+    warn("❌ 未同意协议，请设置RULER=\"YES\"")
+    return -- 停止执行脚本
 end
 
--- 如果RULER为"YES"，则正常执行主脚本
-print("✅ 协议检查通过，正在加载主脚本...")
+-- 检查RULER是否为"YES"
+if RULER ~= "YES" then
+    -- 发送原生通知：格式错误
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "❌ 协议格式错误",
+        Text = "RULER必须设置为\"YES\"（大写）",
+        Icon = "rbxassetid://6881975538",
+        Duration = 5
+    })
+    
+    -- 控制台输出
+    warn("❌ 协议格式错误，RULER必须设置为\"YES\"")
+    return -- 停止执行脚本
+end
+
+-- 协议检查通过
+-- 发送原生通知：协议通过
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "✅ 协议检查通过",
+    Text = "已同意协议，准备加载脚本...",
+    Icon = "rbxassetid://6881979636", -- 成功图标
+    Duration = 2
+})
+
+-- 控制台输出
+print("✅ 协议检查通过")
+print("📜 用户已同意使用协议")
+
+-- 延迟显示加载提示
+task.wait(1)
+
+-- 发送原生通知：正在加载脚本
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "📃↹📂 正在加载脚本",
+    Text = "请稍候，脚本正在加载中...",
+    Icon = "rbxassetid://6881972516", -- 加载图标
+    Duration = 3
+})
+
+-- 控制台输出
+print(" 正在加载脚本...")
+print("📃↹📂 脚本加载中，请稍候")
+
+-- 延迟显示加载动画
+local dots = {".", "..", "...", "...."}
+for i = 1, 10 do
+    local dot = dots[(i % #dots) + 1]
+    print("📂 加载中" .. dot)
+    task.wait(0.1)
+end
+
+-- 执行主脚本
+print("执行主脚本...")
 loadstring(game:HttpGet("https://raw.githubusercontent.com/LMPE1145/Loader/refs/heads/main/LMPECENTER.lua"))()
