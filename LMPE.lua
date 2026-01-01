@@ -1,19 +1,522 @@
-local OrionLib = loadstring(game:HttpGet("https://pastebin.com/raw/j9TdK86G"))()
+local OrionLib = loadstring(game:HttpGet("https://pastebin.com/raw/FUEx0f3G"))()
 
-OrionLib:MakeNotification({
-    Name = "LMPEV2.0",
-    Content = "脚本启动中",
-    Time = 2.5 })
+local ScreenGui = Instance.new("ScreenGui", getParent)
+local TimeLabel = Instance.new("TextLabel", getParent)
+local LocalPlayer = game.Players.LocalPlayer
 
-local Sound = Instance.new("Sound")
-    Sound.SoundId = "rbxassetid://4590662766"
-    Sound.Parent = game:GetService("SoundService")
-    Sound.Volume = 5
-    Sound:Play()
-    Sound.Ended:Wait()
-    Sound:Destroy()
+ScreenGui.Name = "LBLG"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Enabled = true
 
-local Window = OrionLib:MakeWindow({Name = "LMPEV2.0", HidePremium = false, SaveConfig = false, IntroText = "LMPEV2.0", ConfigFolder = "LMPEV2.0"})
+TimeLabel.Name = "LBL"
+TimeLabel.Parent = ScreenGui
+TimeLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+TimeLabel.BackgroundTransparency = 1
+TimeLabel.BorderColor3 = Color3.new(0, 0, 0)
+TimeLabel.Position = UDim2.new(0.75, 0, 0.01, 0)
+TimeLabel.Size = UDim2.new(0, 133, 0, 30)
+TimeLabel.Font = Enum.Font.GothamSemibold
+TimeLabel.Text = "TextLabel"
+TimeLabel.TextColor3 = Color3.new(1, 1, 1)
+TimeLabel.TextScaled = true
+TimeLabel.TextSize = 14
+TimeLabel.TextWrapped = true
+TimeLabel.Visible = true
+
+local TimeLabelRef = TimeLabel
+local Heartbeat = game:GetService("RunService").Heartbeat
+local CurrentTick = nil
+local StartTick = nil
+local FrameTable = {}
+
+local function UpdateFPS()
+    CurrentTick = tick()
+    for i = #FrameTable, 1, -1 do
+        FrameTable[i + 1] = FrameTable[i] >= CurrentTick - 1 and FrameTable[i] or nil
+    end
+    FrameTable[1] = CurrentTick
+    local fps = tick() - StartTick >= 1 and #FrameTable or #FrameTable / (tick() - StartTick)
+    local fpsRounded = fps - fps % 1
+    TimeLabelRef.Text = "时间:" .. os.date("%H") .. "时" .. os.date("%M") .. "分" .. os.date("%S")
+end
+
+StartTick = tick()
+Heartbeat:Connect(UpdateFPS)
+
+local MainWindow = OrionLib:MakeWindow({
+    Name = "LMPE",
+    HidePremium = false,
+    SaveConfig = true,
+    IntroText = "LMPE",
+    ConfigFolder = "LMPE"
+})
+
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "LMPE",
+    Text = "LMPE",
+    Duration = 4
+})
+
+local MainTab = MainWindow:MakeTab({
+    Name = "LMPE",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+MainTab:AddParagraph("脚本更新内容：飞行")
+MainTab:AddParagraph("禁止被圈")
+
+local AnnouncementTab = MainWindow:MakeTab({
+    Name = "公告",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+AnnouncementTab:AddButton({
+    Name = "复制作者QQ",
+    Callback = function()
+        setclipboard("825763412")
+    end
+})
+
+AnnouncementTab:AddButton({
+    Name = "复制QQ群",
+    Callback = function()
+        setclipboard("498865259")
+    end
+})
+
+local PlayerTab = MainWindow:MakeTab({
+    Name = "玩家",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+PlayerTab:AddSection({
+    Name = "欢迎欢迎"
+})
+
+PlayerTab:AddSlider({
+    Name = "速度",
+    Min = 16,
+    Max = 200,
+    Default = 16,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    ValueName = "数值",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end
+})
+
+PlayerTab:AddSlider({
+    Name = "跳跃高度",
+    Min = 50,
+    Max = 200,
+    Default = 50,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    ValueName = "数值",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end
+})
+
+PlayerTab:AddTextbox({
+    Name = "跳跃高度设置",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end
+})
+
+PlayerTab:AddTextbox({
+    Name = "移动速度设置",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end
+})
+
+PlayerTab:AddTextbox({
+    Name = "重力设置",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        game.Workspace.Gravity = Value
+    end
+})
+
+PlayerTab:AddToggle({
+    Name = "夜视",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            game.Lighting.Ambient = Color3.new(1, 1, 1)
+        else
+            game.Lighting.Ambient = Color3.new(0, 0, 0)
+        end
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "飞行V3（隐藏）",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/U27yQRxS"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "曾躯",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/SkrillexMe/SkrillexLoader/main/SkrillexLoadMain"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "爬墙",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/zXk4Rq2r"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "光影V4",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/MZEEN2424/Graphics/main/Graphics.xml"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "变成蛋",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.ga/tWBTcE4R/raw", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "让别让别人控制自己",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.ga/a7RTi4un/raw", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "点击传送工具",
+    Callback = function()
+        mouse = game.Players.LocalPlayer:GetMouse()
+        tool = Instance.new("Tool")
+        tool.RequiresHandle = false
+        tool.Name = "[FE] TELEPORT TOOL"
+        tool.Activated:connect(function()
+            local targetPosition = mouse.Hit + Vector3.new(0, 2.5, 0)
+            local newCFrame = CFrame.new(targetPosition.X, targetPosition.Y, targetPosition.Z)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = newCFrame
+        end)
+        tool.Parent = game.Players.LocalPlayer.Backpack
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "全(英文������)",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/kEq7bdf9"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "地岩",
+    Callback = function()
+        loadstring("loadstring(game:HttpGet(\"https://raw.githubusercontent.com/bbamxbbamxbbamx/codespaces-blank/main/%E7%99%BD\"))()")()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "dx旧版本",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/DXuwu/test-lol/main/YO.lua"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "脚本中心",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/gemxHwA1"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "无敌",
+    Callback = function()
+        local player = game:GetService("Players").LocalPlayer
+        if player.Character:FindFirstChild("Head") then
+            local character = player.Character
+            character.Archivable = true
+            local clonedCharacter = character:Clone()
+            clonedCharacter.Parent = workspace
+            player.Character = clonedCharacter
+            wait(2)
+            local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+            local humanoidRef = humanoid
+            local clonedHumanoid = humanoid:Clone()
+            clonedHumanoid.Parent = character
+            clonedHumanoid.RequiresNeck = false
+            humanoid.Parent = nil
+            wait(2)
+            player.Character = character
+            clonedCharacter:Destroy()
+            wait(1)
+            local newHumanoid = clonedHumanoid
+            clonedHumanoid:GetPropertyChangedSignal("Health"):Connect(function()
+                if clonedHumanoid.Health <= 0 then
+                    humanoid.Parent = player.Character
+                    wait(1)
+                    humanoid:Destroy()
+                end
+            end)
+            workspace.CurrentCamera.CameraSubject = character
+            if character:FindFirstChild("Animate") then
+                character.Animate.Disabled = true
+                wait(0.1)
+                character.Animate.Disabled = false
+            end
+            player.Character:FindFirstChild("Head"):Destroy()
+        end
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "用飞别人",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/GnvPVBEi"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "防止掉线（反挂机）",
+    Callback = function()
+        print("Anti Afk On")
+        local VirtualUser = game:GetService("VirtualUser")
+        game:GetService("Players").LocalPlayer.Idled:connect(function()
+            VirtualUser:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+            wait(1)
+            VirtualUser:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        end)
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "透视",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/MA8jhPWT"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "吸取全部玩家",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/hQSBGsw2"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "人物无敌",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/H3RLCWWZ"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "隐躯(E)",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/nwGEvkez"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "电脑键盘",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "飞车(E)(别人看到)",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/G3GnBCyC", true))()
+    end
+})
+
+PlayerTab:AddTextbox({
+    Name = "跳跃高度",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end
+})
+
+PlayerTab:AddTextbox({
+    Name = "重力设置",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        game.Workspace.Gravity = Value
+    end
+})
+
+PlayerTab:AddToggle({
+    Name = "穿墙2",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            Noclip = true
+            Stepped = game.RunService.Stepped:Connect(function()
+                if Noclip ~= true then
+                    Stepped:Disconnect()
+                else
+                    local iterator, table, index = pairs(game.Workspace:GetChildren())
+                    while true do
+                        local child
+                        index, child = iterator(table, index)
+                        if index == nil then
+                            break
+                        end
+                        if child.Name == game.Players.LocalPlayer.Name then
+                            local iterator2, table2, index2 = pairs(game.Workspace[game.Players.LocalPlayer.Name]:GetChildren())
+                            while true do
+                                local part
+                                index2, part = iterator2(table2, index2)
+                                if index2 == nil then
+                                    break
+                                end
+                                if part:IsA("BasePart") then
+                                    part.CanCollide = false
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        else
+            Noclip = false
+        end
+    end
+})
+
+PlayerTab:AddToggle({
+    Name = "夜视",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            game.Lighting.Ambient = Color3.new(1, 1, 1)
+        else
+            game.Lighting.Ambient = Color3.new(0, 0, 0)
+        end
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "鼠标（手机非常不建议用）",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.ga/V75mqzaz/raw", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "飞行",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/U27yQRxS"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "跟踪玩家",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/F9PNLcXk"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "伪名说话",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.ga/zCFEwaYq/raw", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "踏空行走",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Float"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "透视",
+    Callback = function()
+        loadstring(game:GetObjects("rbxassetid://10092697033")[1].Source)()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "轿起来",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/r97d7dS0", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "隐躯(E)",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/nwGEvkez"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "立即死亡",
+    Callback = function()
+        game.Players.LocalPlayer.Character.Humanoid.Health = 0
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "黑客脚本",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/BirthScripts/Scripts/main/c00l.lua"))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "管理员",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/iK4oS/backdoor.exe/master/source.lua", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "回滚衙后分服务器可能不可以能用",
+    Callback = function()
+        game.Players.LocalPlayer.Character.Humanoid.Health = 10000
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "键盘",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))()
+    end
+})
+
+PlayerTab:AddButton({
+    Name = "玩家动作",
+    Callback = function()
+        getgenv().she = "作者小盛蓝免贵请勿倒卖"
+        loadstring(game:HttpGet("https://pastebin.com/raw/Zj4NnKs6"))()
+    end
+})
 
 local Tab = Window:MakeTab({
     Name = "关于+服务器信息",
@@ -946,22 +1449,6 @@ Tab:AddTextbox({
     TextDisappear = true,
     Callback = function(Value)
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-end})
-
-Tab:AddTextbox({
-    Name = "跳跃高度 ( 部分服务器没效果 )",
-    Default = "",
-    TextDisappear = true,
-    Callback = function(Value)
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
-end})
-
-Tab:AddTextbox({
-    Name = "重力设置 ( 部分服务器没效果 )",
-    Default = "",
-    TextDisappear = true,
-    Callback = function(Value)
-game.Workspace.Gravity = Value
 end})
 
 Tab:AddToggle({
@@ -2694,819 +3181,6 @@ Tab:AddToggle({
     end
 end})
 
-Tab:AddToggle({
-    Name = "Zapper动画",
-    Default = false,
-    Callback = function(Value)
-    flags.ZapperAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-        while flags.ZapperAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 or humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ZapperWalk" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ZapperIdle"
-                    Animation.AnimationId = "rbxassetid://14498563473"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ZapperIdle" then
-                    v:Stop()
-                    idle = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ZapperWalk"
-                    Animation.AnimationId = "rbxassetid://14498289874"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                end
-            end
-        end
-        repeat task.wait() until not flags.ZapperAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "ZapperWalk" then
-            v:Stop()
-       elseif tostring(v) == "ZapperIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Igniter动画",
-    Default = false,
-    Callback = function(Value)
-    flags.IgniterAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.IgniterAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "IgniterIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "IgniterIdle"
-                    Animation.AnimationId = "rbxassetid://14678879479"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "IgniterWalk" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "IgniterIdle"
-                    Animation.AnimationId = "rbxassetid://14678879479"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "IgniterIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "IgniterWalk"
-                    Animation.AnimationId = "rbxassetid://14678880308"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.IgniterAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "IgniterWalk" then
-            v:Stop()
-       elseif tostring(v) == "IgniterIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Headless动画",
-    Default = false,
-    Callback = function(Value)
-    flags.HeadlessAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.HeadlessAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "HeadlessIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessIdle"
-                    Animation.AnimationId = "rbxassetid://107080941320600"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "HeadlessWalk" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessIdle"
-                    Animation.AnimationId = "rbxassetid://107080941320600"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "HeadlessIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessWalk"
-                    Animation.AnimationId = "rbxassetid://74764025513892"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.HeadlessAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "HeadlessWalk" then
-            v:Stop()
-       elseif tostring(v) == "HeadlessIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Cuirassier动画",
-    Default = false,
-    Callback = function(Value)
-    flags.CuirassierAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.CuirassierAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "CuirassierIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "CuirassierIdle"
-                    Animation.AnimationId = "rbxassetid://82800474630427"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "CuirassierWalk" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "CuirassierIdle"
-                    Animation.AnimationId = "rbxassetid://82800474630427"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "CuirassierIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "CuirassierWalk"
-                    Animation.AnimationId = "rbxassetid://118210337289087"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.CuirassierAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "CuirassierWalk" then
-            v:Stop()
-       elseif tostring(v) == "CuirassierIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Cuirassier Charge动画",
-    Default = false,
-    Callback = function(Value)
-    flags.CuirassierChargeAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.CuirassierChargeAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "CuirassierIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "CuirassierIdle"
-                    Animation.AnimationId = "rbxassetid://82800474630427"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "CuirassierCharge" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "CuirassierIdle"
-                    Animation.AnimationId = "rbxassetid://82800474630427"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "CuirassierIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "CuirassierCharge"
-                    Animation.AnimationId = "rbxassetid://73945225930488"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.CuirassierChargeAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "CuirassierCharge" then
-            v:Stop()
-       elseif tostring(v) == "CuirassierIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Charge动画",
-    Default = false,
-    Callback = function(Value)
-    flags.ChargeAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.ChargeAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "ChargeIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeIdle"
-                    Animation.AnimationId = "rbxassetid://14284611111"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ChargeRun" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeIdle"
-                    Animation.AnimationId = "rbxassetid://14284611111"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ChargeIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeRun"
-                    Animation.AnimationId = "rbxassetid://14284623849"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.ChargeAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "ChargeRun" then
-            v:Stop()
-       elseif tostring(v) == "ChargeIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Charge Lance动画",
-    Default = false,
-    Callback = function(Value)
-    flags.ChargeLanceAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.ChargeLanceAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "ChargeLanceIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeLanceIdle"
-                    Animation.AnimationId = "rbxassetid://15669227704"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ChargeLanceRun" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeLanceIdle"
-                    Animation.AnimationId = "rbxassetid://15669227704"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ChargeLanceIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeLanceRun"
-                    Animation.AnimationId = "rbxassetid://15669228671"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.ChargeLanceAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "ChargeLanceRun" then
-            v:Stop()
-       elseif tostring(v) == "ChargeLanceIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Charge Heavy动画",
-    Default = false,
-    Callback = function(Value)
-    flags.ChargeHeavyAnimation = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.ChargeHeavyAnimation do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "ChargeHeavyIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeHeavyIdle"
-                    Animation.AnimationId = "rbxassetid://14284611111"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ChargeHeavyRun" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeHeavyIdle"
-                    Animation.AnimationId = "rbxassetid://14284611111"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "ChargeHeavyIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "ChargeHeavyRun"
-                    Animation.AnimationId = "rbxassetid://17406602570"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.ChargeHeavyAnimation
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "ChargeHeavyRun" then
-            v:Stop()
-       elseif tostring(v) == "ChargeHeavyIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Headless Horseman动画1",
-    Default = false,
-    Callback = function(Value)
-    flags.HeadlessHorsemanAnimation1 = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.HeadlessHorsemanAnimation1 do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "HeadlessHorsemanIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessHorsemanIdle"
-                    Animation.AnimationId = "rbxassetid://13936362530"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "HeadlessHorseman" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessHorsemanIdle"
-                    Animation.AnimationId = "rbxassetid://13936362530"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "HeadlessHorsemanIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessHorseman"
-                    Animation.AnimationId = "rbxassetid://13936362530"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.HeadlessHorsemanAnimation1
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "HeadlessHorseman" then
-            v:Stop()
-       elseif tostring(v) == "HeadlessHorsemanIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddToggle({
-    Name = "Headless Horseman动画2",
-    Default = false,
-    Callback = function(Value)
-    flags.HeadlessHorsemanAnimation2 = Value
-    if Value then
-    local walk = false
-    local idle = false
-    local try = false
-        while flags.HeadlessHorsemanAnimation2 do
-            wait(0.0005)
-            if char then
-            local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-                for i,hold in next, Hum:GetPlayingAnimationTracks() do
-                if tostring(hold) == "Hold" or tostring(hold) == "WalkAnim" then
-                    hold:Stop()
-                    end
-                if idle and tostring(hold) == "HeadlessHorsemanIdle" and not try then
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessHorsemanIdle"
-                    Animation.AnimationId = "rbxassetid://13936362530"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.005)
-                    k:Play()
-                    task.wait(0.1)
-                    k:Play()
-                    try = true
-                    end
-                end
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-                if humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0 then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "HeadlessHorseman" then
-                    v:Stop()
-                    walk = false
-                        end
-                    end
-                    if not idle then
-                    repeat task.wait() until humanoid.MoveDirection.X == 0 and humanoid.MoveDirection.Z == 0
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessHorsemanIdle"
-                    Animation.AnimationId = "rbxassetid://13936362530"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    task.wait(0.01)
-                    k:Play()
-                    idle = true
-                    end
-                elseif not walk then
-                for i,v in next, Hum:GetPlayingAnimationTracks() do
-                    if tostring(v) == "HeadlessHorsemanIdle" then
-                    v:Stop()
-                    idle = false
-                    try = false
-                        end
-                    end
-                    local Animation = Instance.new("Animation")
-                    Animation.Name = "HeadlessHorseman"
-                    Animation.AnimationId = "rbxassetid://14998290995"
-                    local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-                    k:Play()
-                    walk = true
-                    try = false
-                end
-            end
-        end
-        repeat task.wait() until not flags.HeadlessHorsemanAnimation2
-        local Hum = char:FindFirstChildOfClass("Humanoid") or char:FindFirstChildOfClass("AnimationController")
-       for i,v in next, Hum:GetPlayingAnimationTracks() do
-       if tostring(v) == "HeadlessHorseman" then
-            v:Stop()
-       elseif tostring(v) == "HeadlessHorsemanIdle" then
-            v:Stop()
-            end
-        end
-    end
-end})
-
-Tab:AddButton({
-    Name = "Zapper挥砍动画",
-    Callback = function()
-    if char then
-        local tool = char:FindFirstChild("Axe") or char:FindFirstChild("Pickaxe") or char:FindFirstChild("Baguette") or Player.Backpack:FindFirstChild("Axe") or Player.Backpack:FindFirstChild("Pickaxe") or Player.Backpack:FindFirstChild("Baguette")
-        if tool.Parent ~= char then
-        tool.Parent = char
-        end
-        local Handle = Instance.new("Part", tool)
-        Handle.Name = "Handle"
-        Handle.CanCollide = false
-        Handle.Transparency = 1
-        task.spawn(function()
-        task.wait(2.5)
-        Handle:Destroy()
-        end)
-        task.spawn(function()
-            repeat
-            task.wait()
-            pcall(function()
-            end)
-            until not Handle
-        end)
-        local Animation = Instance.new("Animation")
-        Animation.Name = "Zapper Swing"
-        Animation.AnimationId = "rbxassetid://14499470197"
-        local k = char:FindFirstChildOfClass("Humanoid"):LoadAnimation(Animation)
-        k:Play()
-        Handle.Touched:Connect(function(Hit)
-        pcall(function()
-        if Hit.Parent ~= char and Hit.Parent ~= Model and Hit.Parent.Name ~= "3D_Clothing" then
-               if Hit.Parent.Zombie then
-               local Head = {
-               [1] = "HitZombie",
-               [2] = Hit.Parent,
-               [3] = Hit.Parent.Head.CFrame.Position,
-               [4] = true
-               }
-               tool.RemoteEvent:FireServer("Swing","Over")
-               tool.RemoteEvent:FireServer(unpack(Head))
-                    end
-                end
-            end)
-        end)
-    end
-end})
-
-local Tab = Window:MakeTab({
-    Name = "莱克星顿与康科德",
-    Icon = "rbxassetid://14250466898",
-    PremiumOnly = false
-})
-
-Tab:AddButton({
-    Name = "明月清风",
-    Callback = function()
-loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\67\104\105\110\97\81\89\47\83\99\114\105\112\116\115\47\77\97\105\110\47\76\67"))()
-end})
-
 local Tab = Window:MakeTab({
     Name = "LMPE-DOORS But Bad",
     Icon = "rbxassetid://14250466898",
@@ -3591,96 +3265,36 @@ local Tab = Window:MakeTab({
     PremiumOnly = false
 })
 
-Tab:AddToggle({
-	Name = "连续过门",
-	Default = false,
-    Save = false,
-    Flag = "AutoSkip"
+local SettingsTab = MainWindow:MakeTab({
+    Name = "设置",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
-local AutoSkipCoro = coroutine.create(function()
-        while true do
-            task.wait()
-            pcall(function()
-            if OrionLib.Flags["AutoSkip"].Value == true and game:GetService("ReplicatedStorage").GameData.LatestRoom.Value < 100 then
-                local HasKey = false
-                local LatestRoom = game:GetService("ReplicatedStorage").GameData.LatestRoom.Value
-                local CurrentDoor = workspace.CurrentRooms[tostring(LatestRoom)]:WaitForChild("Door")
-                for i,v in ipairs(CurrentDoor.Parent:GetDescendants()) do
-                    if v.Name == "KeyObtain" then
-                        HasKey = v
-                    end
-                end
-                if HasKey then
-                    game.Players.LocalPlayer.Character:PivotTo(CF(HasKey.Hitbox.Position))
-                    task.wait(0.3)
-                    fireproximityprompt(HasKey.ModulePrompt,0)
-                    game.Players.LocalPlayer.Character:PivotTo(CF(CurrentDoor.Door.Position))
-                    task.wait(0.3)
-                    fireproximityprompt(CurrentDoor.Lock.UnlockPrompt,0)
-                end
-                if LatestRoom == 50 then
-                    CurrentDoor = workspace.CurrentRooms[tostring(LatestRoom+1)]:WaitForChild("Door")
-                end
-                game.Players.LocalPlayer.Character:PivotTo(CF(CurrentDoor.Door.Position))
-                task.wait(0.3)
-                CurrentDoor.ClientOpen:FireServer()
-            end
-        end)
+SettingsTab:AddButton({
+    Name = "销毁界面",
+    Callback = function()
+        OrionLib:Destroy()
+        if ScreenGui then
+            ScreenGui:Destroy()
         end
-end)
-coroutine.resume(AutoSkipCoro)
-
-Tab:AddToggle({
-	Name = "没有跳杀",
-	Callback = function()
-        pcall(function()
-            game:GetService("ReplicatedStorage").Bricks.Jumpscare:Destroy()
-        end)
-  	end    
+    end
 })
 
-Tab:AddButton({
-    Name = "情云Forsaken",
+SettingsTab:AddButton({
+    Name = "重新加载",
     Callback = function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/ChinaQY/Scripts/Main/Forsaken"))()
-end})
-
-Tab:AddButton({
-    Name = "AppleStuff",
-    Callback = function()
-loadstring(game:HttpGetAsync(("https://raw.githubusercontent.com/SilkScripts/AppleStuff/main/AppleFSKV2")))()
-end})
-
-Tab:AddButton({
-    Name = "FartHub",
-    Callback = function()
-loadstring(game:HttpGetAsync(("https://raw.githubusercontent.com/ivannetta/ShitScripts/main/forsaken.lua")))()
-end})
-
-local Tab = Window:MakeTab({
-    Name = "脚本中心",
-    Icon = "rbxassetid://14250466898",
-    PremiumOnly = false
+        OrionLib:Destroy()
+        if ScreenGui then
+            ScreenGui:Destroy()
+        end
+        wait(1)
+        loadstring(game:HttpGet("原脚本链接"))()
+    end
 })
 
-Tab:AddButton({
-    Name = "脚本中心",
-    Callback = function()
-loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\103\101\109\120\72\119\65\49"))()
-end})
-
-Tab:AddButton({
-    Name = "XK脚本中心",
-    Callback = function()
-loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\66\73\78\106\105\97\111\98\122\120\54\47\66\73\78\106\105\97\111\47\109\97\105\110\47\88\75\46\84\88\84\34\41\41\40\41\10")()
-end})
-
-local Tab = Window:MakeTab({
-    Name = "其他",
-    Icon = "rbxassetid://14250466898",
-    PremiumOnly = false
-})
+SettingsTab:AddLabel("版本: V2.0")
+SettingsTab:AddLabel("作者: 冷月")
+SettingsTab:AddParagraph("感谢使用冷月脚本中心！")
 
 OrionLib:Init()
-end
