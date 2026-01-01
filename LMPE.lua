@@ -1,6 +1,6 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/ChinaQY/-/Main/UI"))()
 
-if game.Players.LocalPlayer.Name == "ZACHDL114514" then
+if game.Players.LocalPlayer.Name == "ZACHDL11454" then
     game.Players.LocalPlayer:Kick("正在测试")
 else
 
