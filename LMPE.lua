@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/ChinaQY/-/Main/UI"))()
+local OrionLib = loadstring(game:HttpGet("https://pastebin.com/raw/j9TdK86G"))()
 
 OrionLib:MakeNotification({
     Name = "LMPEV2.0",
